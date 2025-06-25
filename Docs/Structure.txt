@@ -1,0 +1,18 @@
+/event_rsvp
+├── /mobile          # Flutter application
+│   ├── lib/
+│   │   ├── features # Auth, events, rsvp
+│   │   ├── core     # Shared utilities
+│   │   └── main.dart
+│   └── pubspec.yaml
+│
+├── /backend         # Node.js API
+│   ├── models/      # MongoDB schemas
+│   ├── routes/      # API endpoints
+│   └── app.js       # Entry point
+│
+├── /docs            # Documentation
+│   ├── API.md       # Endpoint reference
+│   └── DEMO.md      # Presentation notes
+│
+└── README.md        # Project overview
