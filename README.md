@@ -1,4 +1,4 @@
-# 📅 Project 8: Event RSVP Manager
+# 📅 EventFlow
 
 ## 📘 Context
 
