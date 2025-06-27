@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
+  name: {
+    type: String,
     required: [true, 'Name is required'],
-    trim: true
+    trim: true,
+    maxlength: 50
   },
-  email: { 
-    type: String, 
+  email: {
+    type: String,
     required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
@@ -17,16 +18,12 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: 6,
-    select: false 
-  },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
+    minlength: 8,
+    select: false
   }
-});
+}, { timestamps: true });
 
-// Hash password before saving
+// Password hashing middleware
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
