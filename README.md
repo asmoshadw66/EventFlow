@@ -67,33 +67,33 @@ The Event RSVP Manager enables:
 
 ```json
 {
-  "name": "string",
-  "email": "string",
-  "password": "hashed"
+"name": "string",
+"email": "string",
+"password": "hashed"
 }
 ```
 
-### Events
+### EStudyTasks
 
 ```json
 {
-  "title": "string",
-  "description": "string",
-  "dateTime": "ISODate",
-  "location": "string",
-  "createdBy": "ref to Users",
-  "visibility": "public | private"
+"userId": "ref to Users",
+"title": "string",
+"description": "string",
+"date": "ISODate",
+"duration": "number (in minutes)",
+"completed": "boolean"
 }
 ```
 
-### RSVPs
+### Goals
 
 ```json
 {
-  "eventId": "ref to Events",
-  "userId": "ref to Users",
-  "response": "yes | no | maybe",
-  "comment": "string"
+"userId": "ref to Users",
+"targetHoursPerWeek": "number",
+"startDate": "ISODate",
+"endDate": "ISODate"
 }
 ```
 
