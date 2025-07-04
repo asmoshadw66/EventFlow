@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-
+app.use(express.json());
 // Middleware
-app.use(cors());
-app.use(express.json()); // Parse JSON bodies
+app.use('/api/users', require('./routes/user'));
+app.use('/api/events', require('./routes/event'));
+app.use('/api/rsvp', require('./routes/rsvp'));
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -23,9 +25,6 @@ app.get('/', (req, res) => {
 // After middleware setup
 app.use('/api/events', require('./routes/event'));
 app.use('/api/events', require('./routes/rsvp'));
-
-
-
 
 
 // Start Server

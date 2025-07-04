@@ -37,7 +37,5 @@ const EventSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Index for faster queries
-EventSchema.index({ dateTime: 1, visibility: 1 });
 
 module.exports = mongoose.model('Event', EventSchema);
