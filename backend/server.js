@@ -11,6 +11,7 @@ app.use('/api/events', require('./routes/event'));
 app.use('/api/rsvp', require('./routes/rsvp'));
 
 
+ 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
