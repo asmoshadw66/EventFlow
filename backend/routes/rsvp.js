@@ -1,14 +1,17 @@
 const express = require('express');
-const RSVP = require('../models/RSVPs');
-const Event = require('../models/Events');
-const auth = require('../middleware/authMiddleware');
 const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
+const { submitRSVP, getEventRSVPs } = require('../controllers/rsvpController');
+const RSVPs = require('../models/RSVPs');
 
 
-const { respondToEvent, getEventResponses } = require('../controllers/rsvpController');
-const protect = require('../middleware/authMiddleware');
+router.post('/:eventId', protect, submitRSVP);
 
-router.post('/respond', protect, respondToEvent);
-router.get('/event/:id', protect, getEventResponses);
+router.get('/event/:eventId', protect, getEventRSVPs);
+
+router.get('/all', async (req, res) => {
+  const users = await RSVPs.find();
+  res.json(users);
+});
 
 module.exports = router;

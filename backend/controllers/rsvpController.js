@@ -1,7 +1,8 @@
 const RSVP = require('../models/RSVPs');
 
-exports.respondToEvent = async (req, res) => {
-  const { eventId, response, comment } = req.body;
+exports.submitRSVP = async (req, res) => {
+  const { response, comment } = req.body;
+  const { eventId } = req.params;
   const userId = req.user.id;
 
   try {
@@ -21,9 +22,10 @@ exports.respondToEvent = async (req, res) => {
   }
 };
 
-exports.getEventResponses = async (req, res) => {
+exports.getEventRSVPs = async (req, res) => {
   try {
-    const rsvps = await RSVP.find({ eventId: req.params.id }).populate('userId', 'name email');
+    const rsvps = await RSVP.find({ eventId: req.params.eventId })
+      .populate('userId', 'name email');
     res.json(rsvps);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch RSVPs' });

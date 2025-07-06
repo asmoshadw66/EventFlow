@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // Middleware
 app.use('/api/users', require('./routes/user'));
 app.use('/api/events', require('./routes/event'));
@@ -28,8 +29,15 @@ app.use('/api/events', require('./routes/event'));
 app.use('/api/events', require('./routes/rsvp'));
 
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  next();
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}, click on http://localhost:5000`);
 });
+
+
