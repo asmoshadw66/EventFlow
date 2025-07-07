@@ -9,7 +9,7 @@ exports.createEvent = async (req, res) => {
       createdBy: req.user._id
     });
 
-    // Envoi des invitations par mail
+
     for (const email of invitees) {
       await sendInvitationEmail(
         email,
