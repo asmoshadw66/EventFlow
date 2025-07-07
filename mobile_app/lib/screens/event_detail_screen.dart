@@ -1,10 +1,52 @@
 import 'package:flutter/material.dart';
+import '../models/event.dart';
+import '../sevices/api_services.dart';
 
-class EventDetailScreen extends StatelessWidget {
-  const EventDetailScreen({super.key});
+class EventDetailScreen extends StatefulWidget {
+  final Event event;
+  const EventDetailScreen({super.key, required this.event});
+
+  @override
+  State<EventDetailScreen> createState() => _EventDetailScreenState();
+}
+
+class _EventDetailScreenState extends State<EventDetailScreen> {
+  late int accepted;
+  late int declined;
+  late int maybe;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    accepted = widget.event.acceptedCount;
+    declined = widget.event.declinedCount;
+    maybe = widget.event.maybeCount;
+  }
+
+  Future<void> _respondRSVP(String response) async {
+    setState(() { isLoading = true; });
+    final success = await ApiService.respondRSVP(widget.event.id, response);
+    setState(() { isLoading = false; });
+    if (success) {
+      setState(() {
+        if (response == 'accepted') accepted++;
+        if (response == 'declined') declined++;
+        if (response == 'maybe') maybe++;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('RSVP enregistré : $response')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erreur lors de l\'enregistrement du RSVP')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final event = widget.event;
     return Scaffold(
       appBar: AppBar(title: const Text("Event Details")),
       body: Padding(
@@ -12,37 +54,36 @@ class EventDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Tech Conference", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text(event.title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            const Text("Location: New York Convention Center"),
-            const Text("Date: August 15, 2025 at 9:00 AM"),
-            const Text("Organizer: Tech Org Inc."),
-            const Text("Visibility: Public"),
+            Text("Location: ${event.location}"),
+            Text("Date: ${event.date.toLocal()}"),
             const SizedBox(height: 24),
             const Text("Description:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const Text("Annual technology conference featuring the latest innovations in AI, blockchain, and cloud computing."),
+            const SizedBox(height: 4),
+            Text(event is Event ? event.toString() : ''),
             const SizedBox(height: 24),
             const Text("RSVP Status:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
-                    Text("Accepted", style: TextStyle(color: Colors.green)),
-                     Text("12"),
+                    const Text("Accepted", style: TextStyle(color: Colors.green)),
+                    Text("$accepted"),
                   ],
                 ),
                 Column(
                   children: [
-                    Text("Declined", style: TextStyle(color: Colors.red)),
-                     Text("3"),
+                    const Text("Declined", style: TextStyle(color: Colors.red)),
+                    Text("$declined"),
                   ],
                 ),
                 Column(
                   children: [
-                    Text("Maybe", style: TextStyle(color: Colors.orange)),
-                     Text("5"),
+                    const Text("Maybe", style: TextStyle(color: Colors.orange)),
+                    Text("$maybe"),
                   ],
                 ),
               ],
@@ -51,8 +92,7 @@ class EventDetailScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Show RSVP dialog
+                onPressed: isLoading ? null : () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -65,7 +105,7 @@ class EventDetailScreen extends StatelessWidget {
                             leading: const Icon(Icons.check, color: Colors.green),
                             onTap: () {
                               Navigator.pop(context);
-                              // Handle accept
+                              _respondRSVP('accepted');
                             },
                           ),
                           ListTile(
@@ -73,7 +113,7 @@ class EventDetailScreen extends StatelessWidget {
                             leading: const Icon(Icons.close, color: Colors.red),
                             onTap: () {
                               Navigator.pop(context);
-                              // Handle decline
+                              _respondRSVP('declined');
                             },
                           ),
                           ListTile(
@@ -81,7 +121,7 @@ class EventDetailScreen extends StatelessWidget {
                             leading: const Icon(Icons.question_mark, color: Colors.orange),
                             onTap: () {
                               Navigator.pop(context);
-                              // Handle maybe
+                              _respondRSVP('maybe');
                             },
                           ),
                         ],
@@ -89,7 +129,7 @@ class EventDetailScreen extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text("Respond to Invitation"),
+                child: isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Respond to Invitation"),
               ),
             ),
           ],

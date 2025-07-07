@@ -31,10 +31,21 @@ class HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) => ListTile(
-                title: Text(snapshot.data![index].title),
-                subtitle: Text(snapshot.data![index].location),
-              ),
+              itemBuilder: (context, index) {
+                final event = snapshot.data![index];
+                return ListTile(
+                  title: Text(event.title),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(event.location),
+                      const SizedBox(height: 4),
+                      Text('Accepted: ${event.acceptedCount}   Declined: ${event.declinedCount}   Maybe: ${event.maybeCount}',
+                        style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                    ],
+                  ),
+                );
+              },
             );
           } else if (snapshot.hasError) {
             return Center(child: Text("Erreur: ${snapshot.error}"));
