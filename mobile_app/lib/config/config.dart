@@ -4,7 +4,7 @@ class AppConfig {
   /// Configuration des environnements
   static const String apiUrl = kDebugMode
       ? 'http://10.0.2.2:5000'    // Développement (émulateur)
-      : 'https://api.prod.com';    // Production
+      : 'https://api.mobile_app.com';    // Production
 
   /// Endpoints API
   static const String eventsEndpoint = '/events';
