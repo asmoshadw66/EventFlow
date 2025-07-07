@@ -1,143 +1,144 @@
-# 📅 EventFlow
-
-## 📘 Context
-
-This project integrates two learning modules:
-
-- **Mobile Development**: Create a Flutter app that allows users to manage and respond to event invitations.
-- **Web Services with REST API Development**: Use Node.js, Express, and MongoDB to power the backend for events, users, and RSVP data.
-
-The application simulates real-life use cases for managing personal or corporate events and social gatherings, enabling invitation handling and attendee tracking.
+# EventFlow Documentation
 
 ---
 
-## 📝 Project Description
+## 📘 Project Overview
 
-The Event RSVP Manager enables:
+This is a complete solution for managing events and RSVPs:
 
-- Users to create events and invite other users
-- Guests to accept, reject, or comment on invitations
-- Hosts to track responses and manage attendance
-- Admins to monitor event trends and user activity (optional)
+- **Mobile App (Flutter)**: Create, receive, and respond to invitations
+- **Backend (Node.js + Express + MongoDB)**: REST API with user authentication, event handling, and RSVP functionality
+- **Notifications**: Automatic email confirmation for RSVP responses
 
-**Optional Features**:
+## 🔗 GitHub Repository
 
-- Calendar synchronization
-- QR-code-based check-in for physical events
+[Event RSVP Manager Repo](https://github.com/asmoshadw66/EventFlow.git)
 
----
+## 🛠 Setup Instructions
 
-## ✅ Functional Requirements
+### Backend Setup
 
-### 👥 Users
+```bash
+git https://github.com/asmoshadw66/EventFlow.git
+cd Event_RSVP_Manager/backend
+npm install
+```
 
-- Register/login and view event invitations
-- Create events with title, location, and time
-- Invite others via email or username
-- RSVP to invitations (accept / decline / maybe)
+Create a `.env` file:
 
-### 🔧 Admins (Optional)
+```env
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+PORT=5000
+```
 
-- View all public events
-- Remove reported events or users
+Start backend server:
 
----
+```bash
+npm run dev
+```
 
-## 🛠 Technical Requirements
+### Flutter Mobile App
 
-### 🔙 Backend (Node.js + Express + MongoDB)
+```bash
+cd ../mobile_app
+flutter pub get
+flutter run
+```
 
-- REST API for events, invitations, and responses
-- JWT-based authentication and authorization
-- Support for public/private event visibility
-- Optional: Email notification integration
+Update `lib/config.dart`:
 
-### 📱 Mobile App (Flutter)
+```dart
+const String apiBaseUrl = 'http://10.0.2.2:5000';
+```
 
-- User interface for event creation and RSVP
-- Invitations inbox and response screen
-- Event detail view with response summary
-- Optional: Calendar or timeline view
+## 📂 Directory Structure
 
----
+```
+/Event_RSVP_Manager
+├── backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   └── server.js
+├── mobile_app/
+│   └── lib/
+└── docs/
+    ├── API.md
+    └── README.md
+```
 
-## 🧬 Sample Database Schema
+## 📥 API Endpoints
 
 ### Users
-
-```json
-{
-  "name": "string",
-  "email": "string",
-  "password": "hashed"
-}
-```
+- `POST /api/users/register` → Register new user
+- `POST /api/users/login` → Authenticate and receive JWT
+- `GET /api/users/profile` → Get current user profile
 
 ### Events
+- `POST /api/events` → Create event (auth required)
+- `GET /api/events/all` → List all events
+- `GET /api/events/:id` → Get specific event
+- `PUT /api/events/:id` → Update event
+- `DELETE /api/events/:id` → Delete event
 
-```json
-{
-  "title": "string",
-  "description": "string",
-  "dateTime": "ISODate",
-  "location": "string",
-  "createdBy": "ref to Users",
-  "visibility": "public | private"
-}
+### RSVP
+- `POST /api/rsvp/respond` → Submit RSVP response (auth required)
+- `GET /api/rsvp/event/:id` → Get RSVP responses by event ID
+
+## 💌 Email Notification
+
+When a user RSVPs, an email is sent automatically using Nodemailer.
+
+**File:** `backend/utils/mailer.js`
+
+```js
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+exports.sendRSVPNotification = (email, eventTitle) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: `RSVP Confirmation - ${eventTitle}`,
+    text: `Thank you for responding to the event: ${eventTitle}`
+  };
+
+  transporter.sendMail(mailOptions);
+};
 ```
 
-### RSVPs
+## 📱 Mobile App Features
 
-```json
-{
-  "eventId": "ref to Events",
-  "userId": "ref to Users",
-  "response": "yes | no | maybe",
-  "comment": "string"
-}
-```
+- **User Authentication**: Register and log in
+- **Dashboard**: View all invited events
+- **Create Events**: Set title, location, date/time, visibility
+- **RSVP**: Respond to events with yes, no, maybe, and optional comment
+- **Details View**: See all event info and RSVP status
 
----
+> Optional features such as calendar sync and QR code check-ins can be added with Flutter plugins.
 
-## 📊 Evaluation Criteria
+## 🧪 Testing
 
-| Criteria              | Description                                                     |
-| --------------------- | --------------------------------------------------------------- |
-| **Functionality**     | Invitation system with RSVP and event management works smoothly |
-| **Code Quality**      | Clear modular structure and separation of concerns              |
-| **UI/UX**             | Mobile interface is engaging and intuitive                      |
-| **API Design**        | Proper REST conventions, versioning, and security               |
-| **Calendar Handling** | Correct handling of date/time and invitations                   |
-| **Documentation**     | Complete with setup, user guide, and team contributions         |
+- Use **Postman** 
+- Flutter app have been tested on emulators
+
+## 🔐 Notes
+
+- Protect your `.env` file — do not commit secrets
+- Use environment variables to store your sensitive data
+- Use version control (Git) for team collaboration
 
 ---
-
-## 📦 Deliverables
-
-1. **Mobile App (Flutter)**
-
-   * APK and full source code
-   * Screenshots of invitation and RSVP flows
-
-2. **Backend (Node.js/Express/MongoDB)**
-
-   * REST API with CRUD and role handling
-   * API documentation and sample requests
-
-3. **Database**
-
-   * Schema documentation and seed data
-
-4. **Documentation**
-
-   * `README.md`, usage guide, and team contributions
-
-5. **Presentation**
-
-   * Walkthrough of RSVP workflow
-   * Presentation deck highlighting features
-
----
-
-
 
