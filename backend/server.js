@@ -3,7 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
+app.use(cors()); // Autorise toutes les origines (à restreindre en prod)
 
 // Middleware
 app.use(cors());
