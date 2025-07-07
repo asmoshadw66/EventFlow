@@ -39,7 +39,7 @@ class ENRSVPManagerApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) =>  const HomeScreen(),
         '/create': (context) => const CreateEventScreen(),
         '/event': (context) => const EventDetailScreen(),
       },

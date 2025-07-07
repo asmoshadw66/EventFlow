@@ -41,7 +41,7 @@ void main() {
 
     testWidgets('Home screen shows event list and FAB', 
     (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+      await tester.pumpWidget( const MaterialApp(home: HomeScreen()));
 
       // Verify the presence of key elements
       expect(find.byType(ListView), findsOneWidget);

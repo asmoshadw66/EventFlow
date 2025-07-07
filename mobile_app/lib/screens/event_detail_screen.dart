@@ -24,25 +24,25 @@ class EventDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
             const Text("RSVP Status:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
-                    const Text("Accepted", style: TextStyle(color: Colors.green)),
-                    const Text("12"),
+                    Text("Accepted", style: TextStyle(color: Colors.green)),
+                     Text("12"),
                   ],
                 ),
                 Column(
                   children: [
-                    const Text("Declined", style: TextStyle(color: Colors.red)),
-                    const Text("3"),
+                    Text("Declined", style: TextStyle(color: Colors.red)),
+                     Text("3"),
                   ],
                 ),
                 Column(
                   children: [
-                    const Text("Maybe", style: TextStyle(color: Colors.orange)),
-                    const Text("5"),
+                    Text("Maybe", style: TextStyle(color: Colors.orange)),
+                     Text("5"),
                   ],
                 ),
               ],
